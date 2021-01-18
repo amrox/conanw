@@ -1,0 +1,113 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+MY_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+ME="$(basename "$0")"
+
+CONANW_VENV_PATH="${MY_DIR}/.conanw-venv"
+CONANW_CONAN_INSTALL_DIR=${CONANW_VENV_PATH}/bin
+CONANW_CONAN_INSTALL_PATH=${CONANW_CONAN_INSTALL_DIR}/conan
+CONANW_CONF_FILENAME=".conanw.conf"
+CONANW_CONF_PATH="${MY_DIR}/${CONANW_CONF_FILENAME}"
+
+function usage() {
+    echo "Usage: "
+    echo "  $ME [wrapper command] <OR> [conan command]"
+    echo ""
+    echo "Where [wrapper command] is one or more of:"
+    echo ""
+    echo "  --cw-help|--help : Print this message. To print conan help, './conanw help'"
+    echo "  --cw-check       : Check if conan is installed and install if needed."
+    echo "  --cw-dir         : Prints the path to the dir containing the 'conan' command."
+    echo "                     Useful for adding to your path, ie:"
+    echo "                         PATH=\$(./conanw --cw-path):\$PATH"
+    echo "  --cw-path        : Prints the path to the real 'conan' command."
+    echo "  --cw-reinstall   : Reinstall conan."
+    echo ""
+    echo "If no matching [wrapper command] is supplied, all arguments and forwarded"
+    echo "to conan."
+}
+
+function install_conan() {
+
+    if [ -z ${CONANW_CONAN_VERSION_SPEC+x} ]; then
+        # try to load it from our "config" file
+        if [ -f "${CONANW_CONF_PATH}" ]; then
+            source "${CONANW_CONF_PATH}"
+        fi
+    fi
+
+    # If the virtualenv already exists and we try to create a new one,
+    # it will fail because the activate script is read-only. So, if it 
+    # already exists, upgrade it. Otherwise create.
+
+    if [ -e "${CONANW_VENV_PATH}"/bin/activate ]; then
+        echo "${ME}: Updating virtual env at ${CONANW_VENV_PATH}"
+        python3 -m venv --upgrade "${CONANW_VENV_PATH}"
+    else
+        echo "${ME}: Creating a new python virtual env at ${CONANW_VENV_PATH}"
+        python3 -m venv "${CONANW_VENV_PATH}"
+    fi
+
+    extra_conan_pip_install_args="" #TODO
+
+    echo "${ME}: Installing conan${CONANW_CONAN_VERSION_SPEC:-} ..."
+    echo ""
+    "${CONANW_VENV_PATH}"/bin/pip3 install ${extra_conan_pip_install_args} --disable-pip-version-check conan${CONANW_CONAN_VERSION_SPEC:-}
+    echo ""
+    echo "${ME}: conan active at ${CONANW_CONAN_INSTALL_PATH}" 
+    echo ""
+}
+
+if [ ! -z ${1+x} ]; then
+
+    # Custom lightweight arg parsing.
+    # Derived from: https://gist.github.com/jehiah/855086
+    #
+    # All conanw commands are prefixed with '--cw-' to avoid
+    # collisons with any commands or options from conan itself
+    # (except for --help).
+    #
+    # The bash builtin 'getopts' does not support long options, and 
+    # the 'getopt' program isn't consistent across platforms, so 
+    # we just use our own simple parsing.
+
+    while [ "$1" != "" ]; do
+        PARAM=`echo $1 | awk -F= '{print $1}'`
+        VALUE=`echo $1 | awk -F= '{print $2}'`
+        case $PARAM in
+            --help|--cw-help)
+                usage
+                exit
+                ;;
+            --cw-check)
+                install_conan
+                exit
+                ;;
+            --cw-reinstall)
+                cd "${CONANW_VENV_PATH}" && rm -rf *
+                install_conan
+                exit
+                ;;
+            --cw-dir)
+                echo -n "${CONANW_CONAN_INSTALL_DIR}"
+                exit
+                ;;
+            --cw-path)
+                echo -n "${CONANW_CONAN_INSTALL_PATH}"
+                exit
+                ;;
+            *)
+                break
+                ;;
+        esac
+        shift
+    done
+fi 
+
+if [[ ! -f ${CONANW_CONAN_INSTALL_PATH} ]]; then
+    install_conan
+fi
+
+${CONANW_CONAN_INSTALL_PATH} $*

@@ -138,6 +138,6 @@ I'm a huge fan of [direnv](https://direnv.net) and `conanw` is designed to work 
 
 See example [.envrc](examples/direnv/.envrc)
 
-# License
+## License
 
 [MIT](https://github.com/amrox/conanw/blob/main/LICENSE)

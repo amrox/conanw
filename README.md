@@ -34,7 +34,7 @@ You probably also want to add `.conan-venv/` to your `.gitignore`.
 The first time you run `conanw` it will download and install an isolated `conan`. Then it will act as a simple wrapper for that Conan installation.
 
 ```bash
-❯ ./conanw                                                                                                                                                                                 ~/Projects/conanw
+./conanw                                                                                                                                                                                 
 conanw: Creating a new python virtual env at /Users/amrox/Projects/conanw/.conanw-venv
 conanw: Installing conan ...
 

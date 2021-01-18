@@ -138,6 +138,11 @@ I'm a huge fan of [direnv](https://direnv.net) and `conanw` is designed to work 
 
 See example [.envrc](examples/direnv/.envrc)
 
+## Known Issues and Future Work
+
+- If `conan` is installed and `conanw` is invoked (without `--cw-check`) it will not check `CONANW_CONAN_VERSION_SPEC`. This is to avoid surprising the user with an install/upgrade when it may not be strictly necessary. We may want an option to control this behavior, or at least print a warning.
+- A required Conan version can be specified in `conanfile.py`. Currently `conanw` does not integrate with this value at all.
+
 ## License
 
 [MIT](https://github.com/amrox/conanw/blob/main/LICENSE)

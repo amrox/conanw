@@ -137,3 +137,7 @@ sudo apt-get install python3-venv
 I'm a huge fan of [direnv](https://direnv.net) and `conanw` is designed to work with it.
 
 See example [.envrc](examples/direnv/.envrc)
+
+# License
+
+[MIT](https://github.com/amrox/conanw/blob/main/LICENSE)

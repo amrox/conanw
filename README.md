@@ -91,7 +91,7 @@ which conan
 /Users/amrox/Projects/conanw/.conanw-venv/bin/conan
 ```
 
-See also: direnv support
+See also: [direnv integration](#direnv-integration)
 
 ### Controlling the conan version
 
@@ -132,7 +132,7 @@ sudo apt-get install python3-venv
 
 ## Tips and Tricks
 
-### direnv support
+### direnv integration
 
 I'm a huge fan of [direnv](https://direnv.net) and `conanw` is designed to work well with it.
 

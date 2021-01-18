@@ -134,6 +134,6 @@ sudo apt-get install python3-venv
 
 ### direnv integration
 
-I'm a huge fan of [direnv](https://direnv.net) and `conanw` is designed to work well with it.
+I'm a huge fan of [direnv](https://direnv.net) and `conanw` is designed to work with it.
 
 See example [.envrc](examples/direnv/.envrc)

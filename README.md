@@ -1,6 +1,6 @@
 # conanw
 
-A [conan](https://conan.io) installer / runner, inspired by [gradlew](https://docs.gradle.org/current/userguide/gradle_wrapper.html).
+A stupid simple [conan](https://conan.io) installer / runner, inspired by [gradlew](https://docs.gradle.org/current/userguide/gradle_wrapper.html).
 
 ## Why?
 
@@ -21,7 +21,7 @@ This mini-project is very young and may be a silly idea in general.
 Download the `conanw` script and add it to your repository.
 
 ```bash
-curl ...
+curl -O https://raw.githubusercontent.com/amrox/conanw/main/conanw 
 chmod +x conanw
 ```
 

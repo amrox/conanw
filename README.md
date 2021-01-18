@@ -27,6 +27,10 @@ curl -O https://raw.githubusercontent.com/amrox/conanw/main/conanw
 chmod +x conanw
 ```
 
+You probably also want to add `.conan-venv/` to your `.gitignore`.
+
+---
+
 The first time you run `conanw` it will download and install an isolated `conan`. Then it will act as a simple wrapper for that Conan installation.
 
 ```bash

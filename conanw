@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# More info at https://github.com/amrox/conanw
+
 set -euo pipefail
 
 MY_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)

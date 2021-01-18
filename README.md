@@ -1,6 +1,8 @@
 # conanw
 
-A stupid simple [Conan](https://conan.io) installer / runner, inspired by [gradlew](https://docs.gradle.org/current/userguide/gradle_wrapper.html).
+A stupid-simple* [Conan](https://conan.io) installer / runner, inspired by [gradlew](https://docs.gradle.org/current/userguide/gradle_wrapper.html).
+
+* *This README is longer than the [script itself](conanw).*
 
 ## Why?
 

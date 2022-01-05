@@ -41,7 +41,7 @@ function install_conan() {
     fi
 
     # If the virtualenv already exists and we try to create a new one,
-    # it will fail because the activate script is read-only. So, if it 
+    # it will fail because the activate script is read-only. So, if it
     # already exists, upgrade it. Otherwise create.
 
     if [ -e "${CONANW_VENV_PATH}"/bin/activate ]; then
@@ -56,13 +56,13 @@ function install_conan() {
 
     echo "${ME}: Installing conan${CONANW_CONAN_VERSION_SPEC:-} ..."
     echo ""
-    "${CONANW_VENV_PATH}"/bin/pip3 install ${extra_conan_pip_install_args} --disable-pip-version-check conan${CONANW_CONAN_VERSION_SPEC:-}
+    "${CONANW_VENV_PATH}"/bin/pip3 install ${extra_conan_pip_install_args} --disable-pip-version-check "conan${CONANW_CONAN_VERSION_SPEC:-}"
     echo ""
-    echo "${ME}: conan active at ${CONANW_CONAN_INSTALL_PATH}" 
+    echo "${ME}: conan active at ${CONANW_CONAN_INSTALL_PATH}"
     echo ""
 }
 
-if [ ! -z ${1+x} ]; then
+if [ -n "${1+x}" ]; then
 
     # Custom lightweight arg parsing.
     # Derived from: https://gist.github.com/jehiah/855086
@@ -71,45 +71,45 @@ if [ ! -z ${1+x} ]; then
     # collisons with any commands or options from conan itself
     # (except for --help).
     #
-    # The bash builtin 'getopts' does not support long options, and 
-    # the 'getopt' program isn't consistent across platforms, so 
+    # The bash builtin 'getopts' does not support long options, and
+    # the 'getopt' program isn't consistent across platforms, so
     # we just use our own simple parsing.
 
     while [ "$1" != "" ]; do
-        PARAM=`echo $1 | awk -F= '{print $1}'`
-        VALUE=`echo $1 | awk -F= '{print $2}'`
+        PARAM=$(echo "$1" | awk -F= '{print $1}')
+        VALUE=$(echo "$1" | awk -F= '{print $2}')
         case $PARAM in
-            --help|--cw-help)
-                usage
-                exit
-                ;;
-            --cw-check)
-                install_conan
-                exit
-                ;;
-            --cw-reinstall)
-                cd "${CONANW_VENV_PATH}" && rm -rf *
-                install_conan
-                exit
-                ;;
-            --cw-dir)
-                echo -n "${CONANW_CONAN_INSTALL_DIR}"
-                exit
-                ;;
-            --cw-path)
-                echo -n "${CONANW_CONAN_INSTALL_PATH}"
-                exit
-                ;;
-            *)
-                break
-                ;;
+        --help | --cw-help)
+            usage
+            exit
+            ;;
+        --cw-check)
+            install_conan
+            exit
+            ;;
+        --cw-reinstall)
+            cd "${CONANW_VENV_PATH}" && rm -rf ./*
+            install_conan
+            exit
+            ;;
+        --cw-dir)
+            echo -n "${CONANW_CONAN_INSTALL_DIR}"
+            exit
+            ;;
+        --cw-path)
+            echo -n "${CONANW_CONAN_INSTALL_PATH}"
+            exit
+            ;;
+        *)
+            break
+            ;;
         esac
         shift
     done
-fi 
+fi
 
 if [[ ! -f ${CONANW_CONAN_INSTALL_PATH} ]]; then
     install_conan
 fi
 
-${CONANW_CONAN_INSTALL_PATH} $*
+${CONANW_CONAN_INSTALL_PATH} "$@"
